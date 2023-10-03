@@ -1,0 +1,6 @@
+Virtual envvironment
+"c:/Users/MuiXX/Desktop/muizz/docs/Python/Bio Project/Bio-Project/.venv/Scripts/activate.bat" 
+
+Run flask
+flask run
+
