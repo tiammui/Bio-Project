@@ -4,3 +4,5 @@ Virtual envvironment
 Run flask
 flask run
 
+Start UI
+start http://127.0.0.1:5000
