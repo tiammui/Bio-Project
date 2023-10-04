@@ -8,13 +8,15 @@ zk = ZK(
 
 app = Flask(__name__)
 
-conn = zk.connect()
-conn.set_time(datetime.now())
-conn.disconnect()
+def sync():
+    conn = zk.connect()
+    conn.set_time(datetime.now())
+    conn.disconnect()
 
 
 @app.route("/")
 def index():
+    sync()
     return render_template("index.html")
 
 @app.route("/users")
@@ -58,15 +60,6 @@ def attendances():
 
     return attList
 
-
-@app.route("/connectStatus")
-def connect_status():
-    # connect to device
-    conn = zk.connect()
-    # disable device, this method ensures no activity on the device while the process is run
-    conn.disable_device()
-
-
 @app.route("/enroll")
 def enroll():
     # connect to device
@@ -74,8 +67,9 @@ def enroll():
     # disable device, this method ensures no activity on the device while the process is run
     conn.disable_device()
 
-@app.post("/user")
-def user():
+
+@app.post("/user/<userid>")
+def user(userid):
     # connect to device
     conn = zk.connect()
     # disable device, this method ensures no activity on the device while the process is run
@@ -83,9 +77,38 @@ def user():
     
     body = request.json
 
-    conn.
+    conn.set_user(name=body['name'], user_id=userid,group_id=body['department'])
 
     # re-enable device after all commands already executed
     conn.enable_device()
 
-    return body
+    return "success"
+
+@app.post("/newuser")
+def add_user():
+    # connect to device
+    conn = zk.connect()
+    # disable device, this method ensures no activity on the device while the process is run
+    conn.disable_device()
+    
+    body = request.json
+    print(body)
+    # conn.set_user(name=body['name'],user_id=body['userID'],group_id=body['department'])
+    conn.set_user(uid=body['uid'],name=body['name'], user_id=body['userID'],group_id=body['department'])
+
+    # re-enable device after all commands already executed
+    conn.enable_device()
+
+    return "success"
+
+@app.route("/connectstatus")
+def connect_status():
+    # connect to device
+    conn = zk.connect()
+
+    if conn:
+        return True
+    else:
+        return False
+
+# app.run(host="127.0.0.1",port=5005)
