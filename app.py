@@ -32,9 +32,9 @@ def users():
     users = conn.get_users()
     userList = []
     for user in users:
-        privilege = "User"
+        privilege = False
         if user.privilege == const.USER_ADMIN:
-            privilege = "Admin"
+            privilege = True
 
         userList.append(
             {
@@ -42,6 +42,7 @@ def users():
                 "uid": user.uid,
                 "userID": user.user_id,
                 "department": user.group_id,
+"isAdmin": privilege,
             }
         )
 
