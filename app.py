@@ -42,7 +42,7 @@ def users():
                 "uid": user.uid,
                 "userID": user.user_id,
                 "department": user.group_id,
-"isAdmin": privilege,
+                "isAdmin": privilege,
             }
         )
 
@@ -86,10 +86,11 @@ def enroll():
 
     body = request.json
 
-    conn.enroll_user(user_id = body["userID"],temp_id=body["tempID"])
+    conn.enroll_user(user_id=body["userID"], temp_id=body["tempID"])
 
     # re-enable device after all commands already executed
     conn.enable_device()
+
 
 @app.post("/user/<userid>")
 def user(userid):
@@ -144,9 +145,14 @@ def connect_status():
     fingers = conn.fingers
 
     if conn:
-        return {"serialnumber": sn, "devicename": name,"users":users,"fingers":fingers}
+        return {
+            "serialnumber": sn,
+            "devicename": name,
+            "users": users,
+            "fingers": fingers,
+        }
     else:
         return "lost"
 
 
-# app.run(host="127.0.0.1",port=5005)
+app.run(host="127.0.0.1",port=5000)
