@@ -11,8 +11,11 @@ app = Flask(__name__)
 
 def sync():
     conn = zk.connect()
+    conn.disable_device()
     conn.set_time(datetime.now())
+    conn.enable_device()
     conn.disconnect()
+
 
 
 @app.route("/")
@@ -49,6 +52,8 @@ def users():
     # re-enable device after all commands already executed
     conn.enable_device()
 
+    print(userList)
+
     return userList
 
 
@@ -73,6 +78,8 @@ def attendances():
 
     # re-enable device after all commands already executed
     conn.enable_device()
+
+    print(attList)
 
     return attList
 
