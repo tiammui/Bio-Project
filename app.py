@@ -9,18 +9,9 @@ zk = ZK(
 app = Flask(__name__)
 
 
-def sync():
-    conn = zk.connect()
-    conn.disable_device()
-    conn.set_time(datetime.now())
-    conn.enable_device()
-    conn.disconnect()
-
-
 
 @app.route("/")
 def index():
-    sync()
     return render_template("index.html")
 
 
@@ -76,6 +67,7 @@ def attendances():
             }
         )
 
+    conn.clear_attendance()
     # re-enable device after all commands already executed
     conn.enable_device()
 
@@ -107,8 +99,8 @@ def user(userid):
     conn.disable_device()
 
     body = request.json
-
-    conn.set_user(name=body["name"], user_id=userid, group_id=body["department"])
+    print(body)
+    conn.set_user(name=body["name"], user_id=body["userID"], group_id=body["department"])
 
     # re-enable device after all commands already executed
     conn.enable_device()
@@ -143,15 +135,17 @@ def add_user():
 def connect_status():
     # connect to device
     conn = zk.connect()
-
-    sn = conn.get_serialnumber()
-    name = conn.get_device_name()
-
-    conn.read_sizes()
-    users = conn.users
-    fingers = conn.fingers
+    # re-enable device after all commands already executed
+    conn.enable_device()
 
     if conn:
+        conn.set_time(datetime.now())
+        sn = conn.get_serialnumber()
+        name = conn.get_device_name()
+
+        conn.read_sizes()
+        users = conn.users
+        fingers = conn.fingers
         return {
             "serialnumber": sn,
             "devicename": name,
