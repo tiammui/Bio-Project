@@ -1,5 +1,11 @@
 Virtual envvironment
+python -m venv .
 "c:/Users/MuiXX/Desktop/muizz/docs/Python/Bio Project/Bio-Project/.venv/Scripts/activate.bat" 
+"c:/Users/DELL/Desktop/muizz/docs/Web Dev/Bio-Project/Scripts/activate.bat"
+
+Installation
+pip install flask
+pip install pyzk
 
 Run flask
 flask run
